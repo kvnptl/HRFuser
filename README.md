@@ -35,6 +35,17 @@ We tested the code on Linux with
 - cuda 10.1.243
 - gcc 6.3.0
 
+My new versions:
+- python 3.8
+- pytorch 1.10.0+cu102
+- torchvision 0.11.0+cu102
+- cuda 10.2
+- gcc 10.1.0
+
+NOTE: installation commands with `pip`
+- `pip install mmcv-full==1.3.17 -f https://download.openmmlab.com/mmcv/dist/cu102/torch1.10.0/index.html`
+- `pip install torch==1.10.0+cu102 torchvision==0.11.0+cu102 torchaudio==0.10.0 -f https://download.pytorch.org/whl/torch_stable.html`
+
 Installation:
 
 ```

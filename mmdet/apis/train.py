@@ -109,19 +109,51 @@ def train_detector(model,
         for ds in dataset
     ]
 
-    # put model on gpus
-    if distributed:
-        find_unused_parameters = cfg.get('find_unused_parameters', True)
-        # Sets the `find_unused_parameters` parameter in
-        # torch.nn.parallel.DistributedDataParallel
-        model = MMDistributedDataParallel(
-            model.cuda(),
-            device_ids=[torch.cuda.current_device()],
-            broadcast_buffers=False,
-            find_unused_parameters=find_unused_parameters)
-    else:
-        model = MMDataParallel(
-            model.cuda(cfg.gpu_ids[0]), device_ids=cfg.gpu_ids)
+    # # put model on gpus
+    # if distributed:
+    #     find_unused_parameters = cfg.get('find_unused_parameters', True)
+    #     # Sets the `find_unused_parameters` parameter in
+    #     # torch.nn.parallel.DistributedDataParallel
+    #     model = MMDistributedDataParallel(
+    #         model.cuda(),
+    #         device_ids=[torch.cuda.current_device()],
+    #         broadcast_buffers=False,
+    #         find_unused_parameters=find_unused_parameters)
+    # else:
+    #     model = MMDataParallel(
+    #         model.cuda(cfg.gpu_ids[0]), device_ids=cfg.gpu_ids)
+
+    # breakpoint()
+    # #####################################
+
+    # Model Summary
+    from torchinfo import summary
+    import inspect
+
+    signature = inspect.signature(model.forward)
+    print(signature)
+
+    sample = next(iter(data_loaders[0]))
+    sample['img_metas'] = sample['img_metas'].data[0]
+    sample['img'] = sample['img'].data[0]
+    sample['lidar_img'] = sample['lidar_img'].data[0]
+    sample['radar_img'] = sample['radar_img'].data[0]
+    sample['gt_bboxes'] = sample['gt_bboxes'].data[0]
+    sample['gt_labels'] = sample['gt_labels'].data[0]
+
+    print('Generating model summary...')
+    summary(model=model,
+            input_data=sample,
+            col_names=["input_size", "output_size", "num_params", "trainable"],
+            col_width=20,
+            row_settings=["var_names"])
+    
+    # #####################################
+    breakpoint()
+
+    import sys
+    sys.exit(0)
+
 
     # build runner
     optimizer = build_optimizer(model, cfg.optimizer)

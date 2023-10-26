@@ -123,9 +123,9 @@ def train_detector(model,
     #     model = MMDataParallel(
     #         model.cuda(cfg.gpu_ids[0]), device_ids=cfg.gpu_ids)
 
-    # breakpoint()
     # #####################################
-
+    # breakpoint()
+    
     # Model Summary
     from torchinfo import summary
     import inspect
@@ -147,13 +147,13 @@ def train_detector(model,
             col_names=["input_size", "output_size", "num_params", "trainable"],
             col_width=20,
             row_settings=["var_names"])
-    
-    # #####################################
+
     breakpoint()
 
     import sys
     sys.exit(0)
 
+    # #####################################
 
     # build runner
     optimizer = build_optimizer(model, cfg.optimizer)

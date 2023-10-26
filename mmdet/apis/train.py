@@ -138,6 +138,8 @@ def train_detector(model,
     sample['img'] = sample['img'].data[0]
     sample['lidar_img'] = sample['lidar_img'].data[0]
     sample['radar_img'] = sample['radar_img'].data[0]
+    if 'gated_img' in sample:
+        sample['gated_img'] = sample['gated_img'].data[0]
     sample['gt_bboxes'] = sample['gt_bboxes'].data[0]
     sample['gt_labels'] = sample['gt_labels'].data[0]
 
@@ -147,8 +149,6 @@ def train_detector(model,
             col_names=["input_size", "output_size", "num_params", "trainable"],
             col_width=20,
             row_settings=["var_names"])
-
-    breakpoint()
 
     import sys
     sys.exit(0)

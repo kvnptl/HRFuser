@@ -1,5 +1,5 @@
 dataset_type = 'Kitti2DDataset'
-data_root = 'data/dense/'
+data_root = '/home/kpatel2s/kpatel2s/sensor_fusion_rnd/KevinPatelRnD/hrfuser/data/dense/'
 class_names = ['Pedestrian', 'Cyclist', 'Car']
 input_modality = dict(use_lidar=False, use_camera=True)
 img_norm_cfg = dict(

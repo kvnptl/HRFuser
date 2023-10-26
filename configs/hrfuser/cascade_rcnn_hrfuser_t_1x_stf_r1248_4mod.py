@@ -49,5 +49,5 @@ optimizer = dict(
         }))
 runner=dict(max_epochs=60)
 lr_config=dict(policy='step', step=[40,50])
-data=dict(samples_per_gpu= 3, workers_per_gpu= 2)
+data=dict(samples_per_gpu= 1, workers_per_gpu= 1)
 seed=0

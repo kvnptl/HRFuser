@@ -53,5 +53,5 @@ optimizer = dict(
             'relative_position_bias_table': dict(decay_mult=0.),
             'norm': dict(decay_mult=0.)
         }))
-data=dict(samples_per_gpu=2, workers_per_gpu= 1)
+data=dict(samples_per_gpu=1, workers_per_gpu= 1)
 seed=0

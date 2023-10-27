@@ -33,6 +33,7 @@ model = dict(
     neck=dict(
         in_channels=[18, 36, 72, 144]))
 
+# ----> ORIG SETTING <-----
 # AdamW optimizer, no weight decay for position embedding & layer norm
 optimizer = dict(
     _delete_=True,
@@ -46,7 +47,51 @@ optimizer = dict(
             'relative_position_bias_table': dict(decay_mult=0.),
             'norm': dict(decay_mult=0.)
         }))
-runner=dict(max_epochs=60)
-lr_config=dict(policy='step', step=[40,50])
+data=dict(samples_per_gpu= 3, workers_per_gpu= 2)
+seed=0
+
+# ----> SETTING 1 <-----
+'''
+- Derived from ORIG SETTING
+- ONLY FOR 1 GPU
+- Learning rate changed according to Linear Scaling Rule
+
+- original setting is 4 GPUs, sample_per_gpu=3 => Total batch size=12 results in ==> lr=0.0003
+- I am using 1 GPUs, sample_per_gpu=3 => Total batch size=3, so
+  batch_size is reduced by (3/12), so have to adjust lr accordingly. This is according to Linear Scaling Rule paper.
+- So, lr=0.0003 * (3/12) = 0.000075 (new adjusted lr) 
+
+'''
+# AdamW optimizer, no weight decay for position embedding & layer norm
+optimizer = dict(
+    _delete_=True,
+    type='AdamW',
+    lr=0.000075,  # Adjusted learning rate
+    betas=(0.9, 0.999),
+    weight_decay=0.01,
+    paramwise_cfg=dict(
+        custom_keys={
+            'absolute_pos_embed': dict(decay_mult=0.),
+            'relative_position_bias_table': dict(decay_mult=0.),
+            'norm': dict(decay_mult=0.)
+        }))
+data=dict(samples_per_gpu= 3, workers_per_gpu= 2)  # Unchanged
+seed=0
+
+# ----> SETTING 2 <-----
+# As mentioned in the paper, LR=0.0001
+# AdamW optimizer, no weight decay for position embedding & layer norm
+optimizer = dict(
+    _delete_=True,
+    type='AdamW',
+    lr=0.0001,
+    betas=(0.9, 0.999),
+    weight_decay=0.01,
+    paramwise_cfg=dict(
+        custom_keys={
+            'absolute_pos_embed': dict(decay_mult=0.),
+            'relative_position_bias_table': dict(decay_mult=0.),
+            'norm': dict(decay_mult=0.)
+        }))
 data=dict(samples_per_gpu= 3, workers_per_gpu= 2)
 seed=0

@@ -33,7 +33,7 @@ model = dict(
     neck=dict(
         in_channels=[18, 36, 72, 144]))
 
-# # ----> ORIG SETTING <-----
+# ----> ORIG SETTING <-----
 # # AdamW optimizer, no weight decay for position embedding & layer norm
 # optimizer = dict(
 #     _delete_=True,
@@ -94,4 +94,61 @@ seed=8
 #             'norm': dict(decay_mult=0.)
 #         }))
 # data=dict(samples_per_gpu= 3, workers_per_gpu= 2)
+# seed=8
+
+# # ----> SETTING 3 <-----
+# '''
+# - Derived from ORIG SETTING
+# - FOR 4 GPU but reduced batch size to 2
+# - Learning rate changed according to Linear Scaling Rule
+
+# - original setting is 4 GPUs, sample_per_gpu=3 => Total batch size=12 results in ==> lr=0.0003
+# - I am using 4 GPUs, sample_per_gpu=2 => Total batch size=8, so
+#   batch_size is reduced by (8/12), so have to adjust lr accordingly. This is according to Linear Scaling Rule paper.
+# - So, lr=0.0003 * (8/12) = 0.0002 (new adjusted lr) 
+
+# '''
+# # AdamW optimizer, no weight decay for position embedding & layer norm
+# optimizer = dict(
+#     _delete_=True,
+#     type='AdamW',
+#     lr=0.0002,  # Adjusted learning rate
+#     betas=(0.9, 0.999),
+#     weight_decay=0.01,
+#     paramwise_cfg=dict(
+#         custom_keys={
+#             'absolute_pos_embed': dict(decay_mult=0.),
+#             'relative_position_bias_table': dict(decay_mult=0.),
+#             'norm': dict(decay_mult=0.)
+#         }))
+# data=dict(samples_per_gpu= 2, workers_per_gpu= 2)  # Changed
+# seed=8
+
+# # ----> SETTING 4 <-----
+# # Changing batch size 4 and workers_per_gpu to 3
+# '''
+# - Derived from ORIG SETTING
+# - FOR 4 GPUs
+# - Learning rate changed according to Linear Scaling Rule
+
+# - original setting is 4 GPUs, sample_per_gpu=3 => Total batch size=12 results in ==> lr=0.0003
+# - I am using 4 GPUs, sample_per_gpu=4 => Total batch size=16, so
+#   batch_size is reduced by (16/12), so have to adjust lr accordingly. This is according to Linear Scaling Rule paper.
+# - So, lr=0.0003 * (16/12) = 0.000075 (new adjusted lr) 
+
+# '''
+# # AdamW optimizer, no weight decay for position embedding & layer norm
+# optimizer = dict(
+#     _delete_=True,
+#     type='AdamW',
+#     lr=0.0004,  # Adjusted learning rate
+#     betas=(0.9, 0.999),
+#     weight_decay=0.01,
+#     paramwise_cfg=dict(
+#         custom_keys={
+#             'absolute_pos_embed': dict(decay_mult=0.),
+#             'relative_position_bias_table': dict(decay_mult=0.),
+#             'norm': dict(decay_mult=0.)
+#         }))
+# data=dict(samples_per_gpu= 4, workers_per_gpu= 4)  # Changed
 # seed=8

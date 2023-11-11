@@ -134,21 +134,38 @@ def train_detector(model,
     print(signature)
 
     sample = next(iter(data_loaders[0]))
+
     sample['img_metas'] = sample['img_metas'].data[0]
     sample['img'] = sample['img'].data[0]
-    sample['lidar_img'] = sample['lidar_img'].data[0]
-    sample['radar_img'] = sample['radar_img'].data[0]
+    if 'lidar_img' in sample:
+        sample['lidar_img'] = sample['lidar_img'].data[0]
+    if 'radar_img' in sample:
+        sample['radar_img'] = sample['radar_img'].data[0]
     if 'gated_img' in sample:
         sample['gated_img'] = sample['gated_img'].data[0]
     sample['gt_bboxes'] = sample['gt_bboxes'].data[0]
     sample['gt_labels'] = sample['gt_labels'].data[0]
+    import copy
 
     print('Generating model summary...')
     summary(model=model,
-            input_data=sample,
-            col_names=["input_size", "output_size", "num_params", "trainable"],
+            input_data=copy.deepcopy(sample),
+            col_names=["input_size", "output_size", "num_params", "params_percent", "trainable"],
             col_width=20,
+            depth=30,
             row_settings=["var_names"])
+    
+    from mmcv.cnn import get_model_complexity_info
+
+    print('Computing FLOPs and Params...')
+    # Takes model and input shape as tuple
+    flops, params = get_model_complexity_info(model, sample, print_per_layer_stat=False)
+    split_line = '=' * 30
+    print(f'{split_line}\nInput shape: {tuple(sample["img"].data[0].shape)}\n'
+          f'Flops: {flops}\nParams: {params}\n{split_line}')
+    print('!!!Please be cautious if you use the results in papers. '
+          'You may need to check if all ops are supported and verify that the '
+          'flops computation is correct.')
 
     import sys
     sys.exit(0)

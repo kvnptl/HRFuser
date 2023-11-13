@@ -102,16 +102,16 @@ model = dict(
 # -----> Settings 3, change lr, as per the Linear Scaling Rule and sample_per_gpu<-----
 '''
 NOTE: 
-- original setting is 4 GPUs, sample_per_gpu=3 => Total batch size=12 results in ==> lr=0.0001
+- original setting is 4 GPUs, sample_per_gpu=3 => Total batch size=12 results in ==> lr=0.001
 - I am using 1 GPUs, sample_per_gpu=2 => Total batch size=2, so
   batch_size is reduced by (2/12), so have to adjust lr accordingly. This is according to Linear Scaling Rule paper.
-- So, lr=0.0001 * (2/12) = 0.000016667 (new adjusted lr) 
+- So, lr=0.001 * (2/12) = 0.000016667 (new adjusted lr) 
 '''
 # AdamW optimizer, no weight decay for position embedding & layer norm
 optimizer = dict(
     _delete_=True,
     type='AdamW',
-    lr=0.000016667,  # Adjusted learning rate
+    lr=0.00016667,  # Adjusted learning rate
     betas=(0.9, 0.999),
     weight_decay=0.01,
     paramwise_cfg=dict(

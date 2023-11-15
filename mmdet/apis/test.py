@@ -37,8 +37,8 @@ def single_gpu_test(model,
 
         batch_size = len(result)
         if show or out_dir:
-            undo_gt_crop=False
-            show_gt_bbox_results = False
+            undo_gt_crop=True
+            show_gt_bbox_results = True
             post_fix = '_former'
             import numpy as np
             reduzed_classes=False

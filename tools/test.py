@@ -40,6 +40,12 @@ def parse_args():
         'useful when you want to format the result to a specific format and '
         'submit it to the test server')
     parser.add_argument(
+        '--gpu-ids',
+        type=int,
+        nargs='+',
+        help='ids of gpus to use '
+        '(only applicable to non-distributed training)')
+    parser.add_argument(
         '--eval',
         type=str,
         nargs='+',
@@ -193,9 +199,16 @@ def main():
         model.CLASSES = checkpoint['meta']['CLASSES']
     else:
         model.CLASSES = dataset.CLASSES
+    
+    if args.gpu_ids is not None:
+        gpu_ids = args.gpu_ids
+        print(f'Use GPU {gpu_ids} for testing')
+    else:
+        gpu_ids = 0
+        print(f'Use GPU {gpu_ids} for testing')
 
     if not distributed:
-        model = MMDataParallel(model, device_ids=[0])
+        model = MMDataParallel(model, device_ids=[gpu_ids])
         outputs = single_gpu_test(model, data_loader, args.show, args.show_dir,
                                   args.show_score_thr)
     else:

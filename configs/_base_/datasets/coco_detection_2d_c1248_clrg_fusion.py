@@ -1,4 +1,4 @@
-dataset_type = 'CocoDataset'
+dataset_type = 'CocoDatasetDense'
 data_root = '/home/kpatel2s/kpatel2s/sensor_fusion_rnd/KevinPatelRnD/hrfuser_cuda11p1/data/dense/'
 class_names = ['Pedestrian', 'Cyclist', 'Car']
 input_modality = dict(use_lidar=False, use_camera=True)

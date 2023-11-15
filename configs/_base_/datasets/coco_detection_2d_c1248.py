@@ -1,5 +1,5 @@
 dataset_type = 'CocoDataset'
-data_root = '/home/kpatel2s/kpatel2s/sensor_fusion_rnd/KevinPatelRnD/hrfuser/data/dense/'
+data_root = '/home/kpatel2s/kpatel2s/sensor_fusion_rnd/KevinPatelRnD/hrfuser_cuda11p1/data/dense/'
 class_names = ['Pedestrian', 'Cyclist', 'Car']
 input_modality = dict(use_lidar=False, use_camera=True)
 img_norm_cfg = dict(
@@ -55,7 +55,7 @@ data = dict(
     test=dict(
         type=dataset_type,
         data_root=data_root,
-        ann_file= '/home/kpatel2s/kpatel2s/sensor_fusion_rnd/KevinPatelRnD/hrfuser/data/dense/dense_infos_all_modified_COCO.json',
+        ann_file= '/home/kpatel2s/kpatel2s/sensor_fusion_rnd/KevinPatelRnD/hrfuser_cuda11p1/data/dense/dense_infos_train_clear_coco.json',
         img_prefix='',
         classes=class_names,
         pipeline=test_pipeline,

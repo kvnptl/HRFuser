@@ -1,7 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import argparse
 import os
-from collections import Sequence
+from collections.abc import Sequence
 from pathlib import Path
 
 import mmcv
@@ -26,6 +26,11 @@ def parse_args():
         default=None,
         type=str,
         help='If there is no display interface, you can save it')
+    parser.add_argument(
+        '--annotation',
+        default=None,
+        type=str,
+        help='setting custom annotation file path')
     parser.add_argument('--not-show', default=False, action='store_true')
     parser.add_argument(
         '--show-interval',
@@ -72,6 +77,10 @@ def retrieve_data_cfg(config_path, skip_type, cfg_options):
 def main():
     args = parse_args()
     cfg = retrieve_data_cfg(args.config, args.skip_type, args.cfg_options)
+
+    # Add all pkl files in the dataset
+    if args.annotation:
+        cfg.data.train['ann_file']=args.annotation
 
     dataset = build_dataset(cfg.data.train)
 

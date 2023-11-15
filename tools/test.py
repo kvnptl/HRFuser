@@ -206,6 +206,79 @@ def main():
         outputs = multi_gpu_test(model, data_loader, args.tmpdir,
                                  args.gpu_collect)
 
+    # import numpy as np
+
+    # def reverse_bbox_transform(bbox_og, crop_offset=(296, 394), crop_size=(384, 1248), orig_size=(1024, 1920), model_size=(384, 1248)):
+    #     """
+    #     Reverse the transformation applied to a ground truth bounding box.
+
+    #     Args:
+    #     - bbox (tuple): A single predicted bounding box in (x_min, y_min, x_max, y_max) format.
+    #     - crop_offset (tuple): The offset (offset_w, offset_h) applied during the cropping.
+    #     - crop_size (tuple): The size (height, width) of the cropped image.
+    #     - orig_size (tuple): The size (height, width) of the original image.
+    #     - model_size (tuple): The size (height, width) to which the model resizes the image.
+
+    #     Returns:
+    #     - tuple: Transformed bounding box in (x_min, y_min, x_max, y_max) format.
+    #     """
+    #     # Convert bbox to numpy array for manipulation
+    #     bbox = np.array(bbox_og[:4], dtype=np.float32)
+        
+    #     # Scale the bbox from the model size to the crop size
+    #     scale_w = crop_size[1] / model_size[1]
+    #     scale_h = crop_size[0] / model_size[0]
+    #     bbox[0::2] *= scale_w  # Scale x coordinates
+    #     bbox[1::2] *= scale_h  # Scale y coordinates
+
+    #     # Add the offset to the bbox
+    #     offset_w, offset_h = crop_offset
+    #     bbox_offset = np.array([offset_w, offset_h, offset_w, offset_h], dtype=np.float32)
+    #     bbox += bbox_offset
+
+    #     # Ensure the bbox is within the original image dimensions
+    #     bbox[0::2] = np.clip(bbox[0::2], 0, orig_size[1] - 1)
+    #     bbox[1::2] = np.clip(bbox[1::2], 0, orig_size[0] - 1)
+
+    #     bbox_og[:4] = bbox.tolist()
+
+    #     return bbox_og
+
+
+    # def draw_bbox_on_img(idx, bbox):
+    #     import cv2
+
+    #     img = cv2.imread(f'/home/kpatel2s/kpatel2s/sensor_fusion_rnd/KevinPatelRnD/hrfuser_cuda11p1/data/dense/{dataset.data_infos[idx]["filename"]}')
+
+    #     x_min, y_min, x_max, y_max = bbox[:4]
+
+    #     cv2.rectangle(img, (int(x_min), int(y_min)), (int(x_max), int(y_max)), (0, 255, 0), 2)
+
+    #     cv2.imwrite('2018-12-12_15-18-40_00400.png', img)
+
+    # # Rescale the bounding box coordinates from the predicted image size to the original image size.
+    # # for idx, output in enumerate(outputs):
+    # #     for i in range(len(output)):
+    # #         # Check if bbox is empty
+    # #         if output[i].shape[0] != 0:
+    # #             for j in range(output[i].shape[0]):
+    # #                 reverse_bbox_transform(output[i][j])
+    # #                 draw_bbox_on_img(idx, output[i][j]) # For debugging
+    # # breakpoint()
+    # # Filter out the low confidence predictions
+    # import numpy as np
+    # filtered_outputs = []
+    # for output in outputs:
+    #     new_output = []
+    #     for out in output:
+    #         if out.shape[0] != 0:  # Check if 'out' is a list of arrays
+    #             # Filter each bbox array in the list if its confidence score is >= 0.3
+    #             filtered_bboxes = np.array([bbox for bbox in out if bbox[-1] >= args.show_score_thr])
+    #             new_output.append(filtered_bboxes)
+    #         else:  # 'out' is a NumPy array
+    #             new_output.append(out)  # Append the empty array as is
+    #     filtered_outputs.append(new_output)
+                    
     rank, _ = get_dist_info()
     if rank == 0:
         if args.out:
@@ -223,7 +296,7 @@ def main():
             ]:
                 eval_kwargs.pop(key, None)
             eval_kwargs.update(dict(metric=args.eval, **kwargs))
-            metric = dataset.evaluate(outputs, **eval_kwargs)
+            metric = dataset.evaluate(outputs, classwise=True, **eval_kwargs)
             print(metric)
             metric_dict = dict(config=args.config, metric=metric)
             if args.work_dir is not None and rank == 0:

@@ -96,6 +96,9 @@ def parse_args():
         default='none',
         help='job launcher')
     parser.add_argument('--local_rank', type=int, default=0)
+
+    parser.add_argument('--weather', type=str, default=None)
+
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
@@ -176,6 +179,17 @@ def main():
         json_file = osp.join(args.work_dir, f'eval_{timestamp}.json')
 
     # build the dataloader
+    if args.weather!=None:
+        ann_path=cfg.data.test['ann_file']
+        tmp=ann_path.split('/')
+        tmp=tmp[:-1]
+        tmp.append(args.weather)
+        new_path='/'.join(tmp)
+        new_path+='_coco.json'
+        cfg.data.test['ann_file']=new_path
+
+    print(cfg.data.test['ann_file'])
+
     dataset = build_dataset(cfg.data.test)
     data_loader = build_dataloader(
         dataset,

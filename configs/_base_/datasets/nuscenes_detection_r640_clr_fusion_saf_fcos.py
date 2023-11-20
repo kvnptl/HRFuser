@@ -9,14 +9,20 @@ data_root = 'data/nuscenes/'
 #         'car', 'truck', 'trailer', 'bus', 'construction_vehicle', 'bicycle',
 #         'motorcycle', 'pedestrian', 'traffic_cone', 'barrier'
 #     ]
+# class_names = [
+#         'car', 'truck', 'trailer', 'bus', 'construction_vehicle', 'bicycle',
+#         'motorcycle'
+#     ]
+# classes = [
+#         'car', 'truck', 'trailer', 'bus', 'construction_vehicle', 'bicycle',
+#         'motorcycle'
+#     ]
 class_names = [
-        'car', 'truck', 'trailer', 'bus', 'construction_vehicle', 'bicycle',
-        'motorcycle'
-    ]
+    'vehicle'
+]
 classes = [
-        'car', 'truck', 'trailer', 'bus', 'construction_vehicle', 'bicycle',
-        'motorcycle'
-    ]
+    'vehicle'
+]
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 # lidar_norm_cfg = dict(
@@ -68,7 +74,7 @@ data = dict(
         type=dataset_type,
         classes=classes,
         data_root=data_root,
-        ann_file='nuscenes_infos_train_mono3d.coco.json',
+        ann_file='nuscenes_infos_train_mono3d_saf_fcos.coco.json',
         img_prefix='',
         lidar_prefix='',
         radar_prefix='',
@@ -79,7 +85,7 @@ data = dict(
         type=dataset_type,
         classes=classes,
         data_root=data_root,
-        ann_file='nuscenes_infos_val_mono3d.coco.json',
+        ann_file='nuscenes_infos_val_mono3d_saf_fcos.coco.json',
         img_prefix='',
         lidar_prefix='',
         radar_prefix='',
@@ -92,7 +98,7 @@ data = dict(
         # In case we want to evaluate on a subset of classes:
         # evaluation_ids=[0, 1, 3, 5, 6, 7], # 2: trailer  4: construction_vehicle 8: traffic 9: barrier
         data_root=data_root,
-        ann_file='nuscenes_infos_val_mono3d.coco.json',
+        ann_file='nuscenes_infos_test_mono3d_denug_2.coco.json',
         img_prefix='',
         lidar_prefix='',
         radar_prefix='',

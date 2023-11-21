@@ -98,7 +98,7 @@ data = dict(
         # In case we want to evaluate on a subset of classes:
         # evaluation_ids=[0, 1, 3, 5, 6, 7], # 2: trailer  4: construction_vehicle 8: traffic 9: barrier
         data_root=data_root,
-        ann_file='nuscenes_infos_test_mono3d_denug_2.coco.json',
+        ann_file='nuscenes_infos_test_mono3d_saf_fcos.coco.json',
         img_prefix='',
         lidar_prefix='',
         radar_prefix='',

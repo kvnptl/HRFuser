@@ -51,7 +51,7 @@ model = dict(
 # seed=8
 
 # ----> SETTING 1 <-----
-# increased max_epochs from 12 to 36
+# increased max_epochs from 12 to 36, and lr step changes from 8,11 to 27,33
 # AdamW optimizer, no weight decay for position embedding & layer norm
 optimizer = dict(
     _delete_=True,
@@ -66,6 +66,13 @@ optimizer = dict(
             'norm': dict(decay_mult=0.)
         }))
 data=dict(samples_per_gpu= 3, workers_per_gpu= 8)  # Changed
+# learning policy
+lr_config = dict(
+    policy='step',
+    warmup='linear',
+    warmup_iters=500,
+    warmup_ratio=0.001,
+    step=[27, 33])
 runner = dict(type='EpochBasedRunner', max_epochs=36)
 seed=8
 

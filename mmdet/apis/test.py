@@ -37,7 +37,7 @@ def single_gpu_test(model,
 
         batch_size = len(result)
         if show or out_dir:
-            undo_gt_crop=True
+            undo_gt_crop=False # False for SAF FCOS based testing
             show_gt_bbox_results = True
             post_fix = '_former'
             import numpy as np

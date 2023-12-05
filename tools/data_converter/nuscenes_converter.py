@@ -186,9 +186,9 @@ def get_lidar_img_info(cam_path):
         sting_list[5] = sting_list[5].replace('.jpg','.png')
     else: 
         raise Exception('Expecting jpg image format')
-    sting_list[3]='lidar_samples/xz0'
+    sting_list[3]='lidar_samples_small_size/xz0'
     lidar_path_xz0 = '/'.join(sting_list)
-    sting_list[3]='lidar_samples/rih'
+    sting_list[3]='lidar_samples_small_size/rih'
     lidar_path_rih = '/'.join(sting_list)
     lidar_img_info= dict(rih=dict(file_name = lidar_path_rih), xz0=dict(file_name = lidar_path_xz0))
     return lidar_img_info
@@ -199,9 +199,9 @@ def get_radar_img_info(cam_path):
         sting_list[5] = sting_list[5].replace('.jpg','.png')
     else: 
         raise Exception('Expecting jpg image format')
-    sting_list[3]='radar_samples/xz0'
+    sting_list[3]='radar_samples_small_size/xz0'
     radar_path_xz0 = '/'.join(sting_list)
-    sting_list[3]='radar_samples/riv'
+    sting_list[3]='radar_samples_small_size/riv'
     radar_path_riv = '/'.join(sting_list)
     radar_img_info= dict(riv=dict(file_name = radar_path_riv), xz0=dict(file_name = radar_path_xz0))
     return radar_img_info
@@ -357,8 +357,8 @@ def _fill_trainval_infos(nusc,
             'CAM_BACK_LEFT',
             'CAM_BACK_RIGHT',
         ]
-        lidar_img_folder_paths = ['./data/nuscenes/lidar_samples/rih/','./data/nuscenes/lidar_samples/xz0/',
-                                './data/nuscenes/radar_samples/riv/','./data/nuscenes/radar_samples/xz0/']
+        lidar_img_folder_paths = ['./data/nuscenes/lidar_samples_small_size/rih/','./data/nuscenes/lidar_samples_small_size/xz0/',
+                                './data/nuscenes/radar_samples_small_size/riv/','./data/nuscenes/radar_samples_small_size/xz0/']
         for folder_path in lidar_img_folder_paths:
             for cam in camera_types:
                 if not os.path.exists(folder_path + cam):
@@ -727,7 +727,7 @@ def export_2d_annotation(root_path, info_path, version, mono3d=True):
         json_prefix = f'{info_path[:-4]}_mono3d'
     else:
         json_prefix = f'{info_path[:-4]}'
-    mmcv.dump(coco_2d_dict, f'{json_prefix}.coco.json')
+    mmcv.dump(coco_2d_dict, f'{json_prefix}_small_size.coco.json')
 
 
 def get_2d_boxes(nusc,
